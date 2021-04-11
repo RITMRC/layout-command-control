@@ -26,6 +26,7 @@ def lint(c):
     """
     print("Running flake8 linter")
     c.run("flake8 bdio/ tasks.py", pty=True)
+    print()
 
 
 @task
@@ -35,6 +36,7 @@ def format(c):
     """
     print("Running black formatter")
     c.run("black bdio/ tasks.py", pty=True)
+    print()
 
 
 @task
@@ -47,11 +49,19 @@ def test(c, coverage=False):
         c.run("pytest --cov=bdio", pty=True)
     else:
         c.run("pytest", pty=True)
+    print()
 
 
-@task(pre=[format, lint, call(test, coverage=True)])
+@task
+def clean(c):
+    print("Running pyclean")
+    c.run("pyclean ./", pty=True)
+    print()
+
+
+@task(pre=[format, lint, call(test, coverage=True)], post=[clean])
 def build(c):
     """
     Run all configured steps
     """
-    print("Build completed")
+    print("Build completed\n")
