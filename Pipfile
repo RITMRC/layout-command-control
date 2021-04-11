@@ -9,6 +9,9 @@ name = "pypi"
 black = "*"
 invoke = "*"
 flake8 = "*"
+pytest = "*"
+coverage = "*"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.8"
@@ -19,3 +22,4 @@ allow_prereleases = true # needed for black prereleases
 [scripts]
 start = "invoke start"
 start-leaf = "invoke start-leaf"
+build = "invoke build"

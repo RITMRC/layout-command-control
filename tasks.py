@@ -1,4 +1,4 @@
-from invoke import task
+from invoke import task, call
 
 
 @task
@@ -24,7 +24,8 @@ def lint(c):
     """
     Static analysis of code for programming issues
     """
-    c.run("flake8 bdio/ tasks.py")
+    print("Running flake8 linter")
+    c.run("flake8 bdio/ tasks.py", pty=True)
 
 
 @task
@@ -32,7 +33,8 @@ def format(c):
     """
     Produce pep8 normative code output
     """
-    c.run("black bdio/ tasks.py")
+    print("Running black formatter")
+    c.run("black bdio/ tasks.py", pty=True)
 
 
 @task
@@ -40,4 +42,16 @@ def test(c, coverage=False):
     """
     Tests
     """
-    print("Testing")
+    print("Running pytest")
+    if coverage:
+        c.run("pytest --cov=bdio", pty=True)
+    else:
+        c.run("pytest", pty=True)
+
+
+@task(pre=[format, lint, call(test, coverage=True)])
+def build(c):
+    """
+    Run all configured steps
+    """
+    print("Build completed")
