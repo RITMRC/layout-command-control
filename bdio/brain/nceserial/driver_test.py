@@ -1,7 +1,7 @@
 from serial import Serial
-from nceserial import NceSerial
+from driver import NceSerialDriver
 
 
 def test_NceSerial_construction():
-    nce = NceSerial()
+    nce = NceSerialDriver()
     assert isinstance(nce.serial, Serial)
