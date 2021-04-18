@@ -7,7 +7,7 @@ NCE_STOPBITS = serial.STOPBITS_ONE
 TIMEOUT_SEC = 1
 
 
-class NceSerial:
+class NceSerialDriver:
     """NCE Command Station Serial Interface Driver"""
 
     def __init__(self):
@@ -19,7 +19,7 @@ class NceSerial:
         )
 
     def is_connected(self):
-        return self.serial.is_open()
+        return self.serial.is_open
 
     def connect(self, port):
         if self.is_connected():
@@ -33,5 +33,16 @@ class NceSerial:
             raise serial.SerialException("NCE Serial not connected")
         self.serial.close()
 
-    def write(self, bytes):
-        return self
+    def write(self, data):
+        #print(f"driver: writing - {data}")
+        return self.serial.write(data)
+
+    def read(self, size):
+        result = self.serial.read(size)
+
+        #print(f"driver: read {size} bytes - {result.hex()}")
+        return result
+
+    def read_write(self, data, size):
+        self.write(data)
+        return self.read(size)
