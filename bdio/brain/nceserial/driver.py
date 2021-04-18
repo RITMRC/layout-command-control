@@ -1,5 +1,4 @@
 import serial
-from .commands import commands
 
 NCE_BAUD = 9600
 NCE_BYTESIZE = serial.EIGHTBITS
@@ -20,7 +19,7 @@ class NceSerialDriver:
         )
 
     def is_connected(self):
-        return self.serial.is_open and self.noop()
+        return self.serial.is_open
 
     def connect(self, port):
         if self.is_connected():
@@ -35,33 +34,15 @@ class NceSerialDriver:
         self.serial.close()
 
     def write(self, data):
-        self.serial.write(data)
+        #print(f"driver: writing - {data}")
+        return self.serial.write(data)
 
-    def read(self, bytecount):
-        return self.serial.read(bytecount)
+    def read(self, size):
+        result = self.serial.read(size)
 
-    def run_command(self, command_name):
-        command = commands[command_name]
-        self.write(command["cmd"])
-        return self.read(command["res_size"])
+        #print(f"driver: read {size} bytes - {result.hex()}")
+        return result
 
-    def noop(self):
-        return self.run_command("NOOP")
-
-    def dummy(self):
-        return self.run_command("DUMMY")
-
-    def read_clock(self):
-        """Read command station clock setting"""
-        return self.run_command("CLOCK_READ")
-
-    def read_clock_formatted(self):
-        hour, minute = self.read_clock()
-        return f"{hour}:{minute}"
-
-    def version(self):
-        return self.run_command("VERSION")
-
-    def version_formatted(self):
-        VV, MM, mm = self.version()
-        return f"v{VV}.{MM}.{mm}"
+    def read_write(self, data, size):
+        self.write(data)
+        return self.read(size)

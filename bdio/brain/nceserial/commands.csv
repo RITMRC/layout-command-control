@@ -11,7 +11,7 @@ command,name,arg_size_bytes,res_size_bytes,res_options
 89,use_main_track       ,0,1,!
 8A,aiu_status           ,1,4,
 8B,use_prog_track       ,0,1,!
-8C,dummy                ,0,3,!|0D|0A
+8C,dummy                ,0,3,!
 8D,loco_set_speed       ,3,1,!|1|3|14|28|128
 8E,write_16             ,19,1,!|4
 8F,read_16              ,2,16,
